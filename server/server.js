@@ -11,20 +11,14 @@ var server = http.createServer(app);
 var io = socketIO(server);
 io.on('connection',(socket)=>{
     console.log('New User Connected');
-    
-    socket.emit('newEmail',{
-        from:"Neeraj Mishra",
-        email:"neerajm63@gmail.com", 
-    });
-
-    socket.emit('newMessage',{
-        from:"Neeraj Mishra",
-        text:"test message",
-        created_at:123
-    });
 
     socket.on('createMessage',(message)=>{
         console.log('Create Message',message);
+        io.emit('newMessage', {
+            from:message.from,
+            text:message.text, 
+            createdAt:new Date().getTime(),
+        });
     });
 
     socket.on('disconnect',()=>{
